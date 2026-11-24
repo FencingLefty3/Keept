@@ -1,0 +1,62 @@
+* {
+    --black: #080312;
+    --white: #e7e7e3f7;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin: 0;
+    padding: 0;
+
+    background-color: var(--black);
+
+    height: 100dvh;
+    width: 100dvw;
+}
+gi {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    height: 50%;
+    width: max-content;
+    overflow: hidden;
+
+    border: 2px solid var(--white);
+    border-radius: 15px;
+    background: #7f7f7f;
+    -webkit-backdrop-filter: blur(90px);  
+    backdrop-filter: blur(90px);
+}
+#editBar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 90dvw;
+    height: 20%;
+}
+#missionContainer {
+    width: 100dvw;
+    min-height: 80%;
+}
+
+button {
+    background: transparent;
+    outline: none;
+    border: none;
+
+    font-size: 2.5rem;
+    color: var(--white);
+
+    height: 100%;
+    width: 4rem;
+}
+button:hover {
+    background: #ffffff14;
+}
