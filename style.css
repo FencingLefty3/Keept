@@ -1,6 +1,8 @@
-* {
+:root {
     --black: #080312;
     --white: #e7e7e3f7;
+    --yellow: #eae66e;
+    --red: #ef866a;
 }
 body {
     display: flex;
@@ -11,10 +13,17 @@ body {
     margin: 0;
     padding: 0;
 
-    background-color: var(--black);
+    background: #080312;
+    background: linear-gradient(180deg, #ab7464 0%, #c26e56 100%);
 
     height: 100dvh;
     width: 100dvw;
+}
+.logoText {
+    color: #ef866a;
+    font-size: 3rem;
+    font-family: Helvetica, sans-serif;
+    margin: 0 0.4rem;
 }
 gi {
     display: flex;
@@ -26,11 +35,39 @@ gi {
     width: max-content;
     overflow: hidden;
 
-    border: 2px solid var(--white);
+    border: 4px solid var(--yellow);
     border-radius: 15px;
-    background: #7f7f7f;
-    -webkit-backdrop-filter: blur(90px);  
-    backdrop-filter: blur(90px);
+    background: #7f7f7f46;
+    -webkit-backdrop-filter: brightness(90%);  
+    backdrop-filter: brightness(90%);
+}
+li {
+    all: unset;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 85%;
+    height: max-content;
+    overflow: hidden;
+}
+it {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+
+    box-sizing: content-box;
+
+    margin: 1rem 0;
+    width: 85%;
+}
+.title {
+    width: 93% !important;
+}
+.emoji {
+    width: 5% !important;
 }
 #editBar {
     display: flex;
@@ -45,7 +82,36 @@ gi {
     width: 100dvw;
     min-height: 80%;
 }
+#createMission {
+    width: 90%;
+    min-height: 80%;
 
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 0.4rem;
+
+    border-radius: 15px;
+    border: 4px solid var(--yellow);
+    background: #7f7f7f46;
+    -webkit-backdrop-filter: blur(20px);  
+    backdrop-filter: blur(20px);
+}
+#createMission:open {
+    display: flex;
+}
+it > p {
+    padding: 0 1px;
+    margin: 4px 0;
+    
+    font-size: 1rem;
+    opacity: 0.4;
+    color: var(--white);
+}
+img {
+    max-height: 100%;
+}
 button {
     background: transparent;
     outline: none;
@@ -57,6 +123,34 @@ button {
     height: 100%;
     width: 4rem;
 }
+
+input, select {
+    height: 2.5rem;
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 1.4rem;
+
+    box-sizing: border-box;
+
+    outline: none;
+    background: none;
+    color: var(--white);
+    border: 1px solid var(--yellow);
+    border-radius: 15px;
+
+    -webkit-backdrop-filter: brightness(60%);  
+    backdrop-filter: brightness(60%);
+}
 button:hover {
     background: #ffffff14;
+}
+form {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
 }

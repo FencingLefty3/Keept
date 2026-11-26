@@ -1,21 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <html lang="en">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
     <link rel="stylesheet"  href="style.css"/>
+
+    <script type="module" src="script.js"></script>
 </head>
 <body>
     <div id="editBar">
+        <img src="keeptLogo.png">
         <gi>
-            
-        </gi>
-        <gi>
-            <button type="button" id="settings"><div class="icon-circle-user-round"></div></button>
             <button type="button" id="addMission"><div class="icon-circle-plus"></div></button>
+            <button type="button" id="settings"><div class="icon-circle-user-round"></div></button>
         </gi>
     </div>
     <div id="missionContainer">
 
     </div>
+    <dialog id="createMission">
+        <form method="dialog" id="missionForm">
+            <li><it class="emoji">
+                <input class="input" type="text" maxlength="2">
+                <p>Icon</p>
+            </it>
+            <it class="title">
+                <input class="input" type="text">
+                <p>Mission Name</p>
+            </it></li>
+            <it>
+                <input class="input" type="text" required>
+                <p>Mission Name</p>
+            </it>
+            <li><it>
+            <input name="times" type="number" min="0" required>
+            <p>Times</p>
+            </it><it>
+                <select name="every" required>
+                    <option value="day">per Day</option>
+                    <option value="week">per Week</option>
+                    <option value="month">per Month</option>
+                </select>
+                <p>Per Period</p>
+            </it></li>
+            <it>
+                <input type="text">
+                <p>Mission Name</p>
+            </it>
+        </form>
+    </dialog>
+    <dialog id="createMission">
+  <form method="dialog" id="missionForm">
+    <div class="tabs" role="tablist" aria-label="Mission type">
+      <button type="button" role="tab" data-type="goal" aria-selected="true">Goal</button>
+      <button type="button" role="tab" data-type="streak" aria-selected="false">Streak</button>
+    </div>
+
+    <div class="panels">
+      <it>
+        <input type="text" name="name" required>
+        <p>Mission name</p>
+      </it>
+
+      <!-- Goal: build up to a total -->
+      <div id="goalPanel" class="panel">
+        <it><input type="number" name="target" min="1" step="any"><p>Target (1000)</p></it>
+        <it><input type="text" name="unit" maxlength="8"><p>Unit ($, pages)</p></it>
+        <it><input type="number" name="step" min="0" step="any"><p>Add each time (1)</p></it>
+      </div>
+
+      <!-- Streak: repeat on a schedule -->
+      <div id="streakPanel" class="panel" hidden>
+        <li><it>
+            <input type="number" min="0">
+        </it><it>
+        <select name="every">
+            <option value="day">per Day</option>
+            <option value="week">per Week</option>
+            <option value="month">per Month</option>
+        </select>
+          <p>How often</p>
+        </it></li>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="cancelMission">Cancel</button>
+        <button type="submit">Create</button>
+      </div>
+    </div>
+  </form>
+</dialog>
 </body>
 </html>
