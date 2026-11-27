@@ -22,6 +22,11 @@
 
     </div>
     <dialog id="createMission">
+        <div class="tabs" role="tablist" aria-label="Mission type">
+            <button type="button" role="tab" data-type="goal" aria-selected="true">Goal</button>
+            <button type="button" role="tab" data-type="streak" aria-selected="false">Streak</button>
+        </div>
+
         <form method="dialog" id="missionForm">
             <div id="Streak" class="fullDiv">
                 <li><it class="emoji">
@@ -29,17 +34,20 @@
                 <p>Icon</p>
                 </it>
                 <it class="title">
-                    <input name="title" class="input" type="text">
+                    <input name="title" class="input" type="text" placeholder="Read Books">
                     <p>Mission Name</p>
                 </it></li>
                 <it>
                     <input name="description" class="input" type="text" required>
                     <p>Description</p>
                 </it>
-                <li><it style="width: 10%;">
-                <input name="times" type="number" min="0" max="9999" required>
+                <li><it class="times">
+                <input name="times" type="number" min="0" max="9999" placeholder="4" required>
                 <p>Times</p>
-                </it><it style="width: 87%;">
+                </it><it class="unit">
+                <input name="unit" type="text" placeholder="pages" required>
+                <p>Unit</p>
+                </it><it class="period">
                     <select name="period" required>
                         <option value="day">per Day</option>
                         <option value="week">per Week</option>
@@ -48,48 +56,25 @@
                     <p>Per Period</p>
                 </it></li>
             </div>
+            <div id="Goal" class="fullDiv">
+                <li><it class="emoji">
+                    <input type="number" name="target" min="1" step="any" placeholder="5">
+                    <p>Target</p>
+                </it><it class="title">
+                    <input type="text" name="unit" maxlength="8" placeholder="books">
+                    <p>Unit</p>
+                </it></li>
+                <it>
+                    <input type="date" name="date">
+                    <p>Deadline</p>
+                </it>
+            </div>
+
+            <div class="actions">
+                <button type="button" id="cancelMission">Cancel</button>
+                <button type="submit">Create</button>
+            </div>
         </form>
     </dialog>
-    <dialog id="createMission">
-  <form method="dialog" id="missionForm">
-    <div class="tabs" role="tablist" aria-label="Mission type">
-      <button type="button" role="tab" data-type="goal" aria-selected="true">Goal</button>
-      <button type="button" role="tab" data-type="streak" aria-selected="false">Streak</button>
-    </div>
-
-    <div class="panels">
-      <it>
-        <input type="text" name="name" required>
-        <p>Mission name</p>
-      </it>
-
-      <!-- Goal: build up to a total -->
-      <div id="goalPanel" class="panel">
-        <it><input type="number" name="target" min="1" step="any"><p>Target (1000)</p></it>
-        <it><input type="text" name="unit" maxlength="8"><p>Unit ($, pages)</p></it>
-        <it><input type="number" name="step" min="0" step="any"><p>Add each time (1)</p></it>
-      </div>
-
-      <!-- Streak: repeat on a schedule -->
-      <div id="streakPanel" class="panel" hidden>
-        <li><it>
-            <input type="number" min="0">
-        </it><it>
-        <select name="every">
-            <option value="day">per Day</option>
-            <option value="week">per Week</option>
-            <option value="month">per Month</option>
-        </select>
-          <p>How often</p>
-        </it></li>
-      </div>
-
-      <div class="actions">
-        <button type="button" id="cancelMission">Cancel</button>
-        <button type="submit">Create</button>
-      </div>
-    </div>
-  </form>
-</dialog>
 </body>
 </html>
