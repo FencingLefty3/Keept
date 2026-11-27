@@ -23,33 +23,31 @@
     </div>
     <dialog id="createMission">
         <form method="dialog" id="missionForm">
-            <li><it class="emoji">
-                <input class="input" type="text" maxlength="2">
+            <div id="Streak" class="fullDiv">
+                <li><it class="emoji">
+                <input name="icon" class="input" type="text" maxlength="2">
                 <p>Icon</p>
-            </it>
-            <it class="title">
-                <input class="input" type="text">
-                <p>Mission Name</p>
-            </it></li>
-            <it>
-                <input class="input" type="text" required>
-                <p>Mission Name</p>
-            </it>
-            <li><it>
-            <input name="times" type="number" min="0" required>
-            <p>Times</p>
-            </it><it>
-                <select name="every" required>
-                    <option value="day">per Day</option>
-                    <option value="week">per Week</option>
-                    <option value="month">per Month</option>
-                </select>
-                <p>Per Period</p>
-            </it></li>
-            <it>
-                <input type="text">
-                <p>Mission Name</p>
-            </it>
+                </it>
+                <it class="title">
+                    <input name="title" class="input" type="text">
+                    <p>Mission Name</p>
+                </it></li>
+                <it>
+                    <input name="description" class="input" type="text" required>
+                    <p>Description</p>
+                </it>
+                <li><it style="width: 10%;">
+                <input name="times" type="number" min="0" max="9999" required>
+                <p>Times</p>
+                </it><it style="width: 87%;">
+                    <select name="period" required>
+                        <option value="day">per Day</option>
+                        <option value="week">per Week</option>
+                        <option value="month">per Month</option>
+                    </select>
+                    <p>Per Period</p>
+                </it></li>
+            </div>
         </form>
     </dialog>
     <dialog id="createMission">
