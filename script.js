@@ -1,6 +1,8 @@
 const $ = (id) => document.getElementById(id);
 const dlg  = $('createMission')
 const form = $('missionForm')
+const editDlg = $('editMission')
+const editForm = $('editForm')
 const tabs = document.querySelectorAll('.tabs [role=tab]')
 const KEY  = 'keept.missions'
 
@@ -17,8 +19,8 @@ function save() {
 function setType(t) {
     dlg.dataset.type = t
     tabs.forEach(b => b.setAttribute('aria-selected', b.dataset.type === t))
-    document.querySelectorAll('.fullDiv').forEach(p => {
-        const on = p.id.toLowerCase() === t
+    dlg.querySelectorAll('.fullDiv').forEach(p => {
+        const on = p.dataset.type === t
         p.querySelectorAll('input, select').forEach(el => el.disabled = !on)
     })
 }
@@ -43,19 +45,23 @@ form.addEventListener('submit', (e) => {
     e.preventDefault()
     const f = new FormData(form)
     const type = dlg.dataset.type
+    const title = f.get('title').trim()
+    const iconChar = title[0]
     const m = {
         id: crypto.randomUUID(),
         type,
-        icon: (f.get('icon') || '').trim() || '',
+        icon: (f.get('icon') || '').trim() ||  `${iconChar}`,
         title: (f.get('title') || '').trim(),
         description: (f.get('description') || '').trim(),
     }
     if (type === 'goal') {
         m.target = Number(f.get('target')) || 1
         m.unit = (f.get('unit') || '').trim()
+        m.deatline = (f.get('date') || '').trim()
         m.progress = 0
     } else {
         m.times = Number(f.get('times')) || 1
+        m.unit = (f.get('unit') || '').trim()
         m.period = f.get('period')
         m.log = []
     }
@@ -95,7 +101,7 @@ function streakInfo(m) {
     })
     let cur = periodStart(m.period, new Date())
     const now = counts[ymd(cur)] || 0
-    if (now < m.times) cur = stepBack(m.period, cur)  // this period can still be completed
+    if (now < m.times) cur = stepBack(m.period, cur) 
     let streak = 0
     while ((counts[ymd(cur)] || 0) >= m.times) {
         streak++
@@ -116,12 +122,14 @@ function h(tag, css, txt) {
 function holdButton(label, onDone) {
     const b = h('button', 'hold', label)
     let t
-    const stop = () => { clearTimeout(t); b.classList.remove('holding')}
+    const stop = () => { clearTimeout(t); b.classList.remove('holding') }
     b.addEventListener('pointerdown', () => {
         b.classList.add('holding')
-        t = setTimeout(() => { stop(); navigator.vibrate?.(30); onDone()})
+        t = setTimeout(() => { stop(); navigator.vibrate?.(30); onDone() }, 600)
     })
-    ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, stop));
+    for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) {
+        b.addEventListener(ev, stop)
+    }
     b.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onDone() }
     })
@@ -130,39 +138,41 @@ function holdButton(label, onDone) {
 
 function card(m) {
     const el = h('div', 'mission')
-    const head = h('div', 'mHead')
-    head.append(h('span', 'mIcon', m.icon), h('strong', 'mTitle', m.title))
-    el.append(head)
-    if(m.description) el.append(h('p', 'mDesc', m.description))
+    const body = h('div', 'mBody')
+    el.append(h('span', 'mIcon', m.icon), body)
+    body.append(h('strong', 'mTitle', m.title))
 
-    let pct, label, done
+    const details = h('li', 'mDetails')
+    if (m.description) {
+        details.append(h('p', 'mDesc', m.description))
+        details.append(h('p', 'mSeparator', '•'))
+    }
+
+    let pct, status, done
     if (m.type === 'goal') {
-        pct = Math.min(100, (m.progress / navigation.target) * 100)
-    label = `${m.progress} / ${m.target} ${m.unit}`.trim()
-    done = m.progress >= m.target
-    el.append(h('p', 'mStat', label))
+        pct = Math.min(100, (m.progress / m.target) * 100)
+        status = `${m.progress} / ${m.target} ${m.unit}`.trim()
+        done = m.progress >= m.target
     } else {
         const s = streakInfo(m)
         pct = Math.min(100, (s.now / m.times) * 100)
         done = s.done
-        el.append(h('p', 'mStat', `${s.now} of ${m.times} this ${m.period}, streak ${s.streak}`))
+        const periodLabel = m.period === 'day' ? 'today' : `this ${m.period}`
+        status = `${s.now} of ${m.times} ${periodLabel} • streak ${s.streak}`
     }
+    details.append(h('p', 'mStat', status))
+    body.append(details)
 
     const bar = h('div', 'bar')
     const fill = h('i')
     fill.style.width = pct + '%'
     bar.append(fill)
-    el.append(bar)
+    body.append(bar)
 
     el.classList.toggle('done', done)
-    if (!done) {
-        el.append(holdButton(m.type === 'goal' ? 'Hold to add 1' : 'Hold to confirm', () => {
-            if (m.type === 'goal') m.progress++;
-            else m.log.push(ymd(new Date()));
-            save()
-            render()
-        }))
-    }
+
+    el.addEventListener('click', () => openEditModal(m))
+
     return el
 }
 
@@ -170,6 +180,75 @@ function render() {
     const box = $('missionContainer')
     box.replaceChildren(...missions.map(card))
 }
+//---------------- Edit ------------//
+
+function openEditModal(m) {
+    editDlg.dataset.id = m.id
+    editDlg.dataset.type = m.type
+
+    let activeDiv
+    editDlg.querySelectorAll('.fullDiv').forEach(div => {
+        const isMatch = div.dataset.type === m.type
+        div.querySelectorAll('input, select').forEach(el => el.disabled = !isMatch)
+        if (isMatch) activeDiv = div
+    })
+
+    if (!activeDiv) throw new Error(`No edit form panel for mission type "${m.type}"`)
+
+    activeDiv.querySelector('[name="title"]').value = m.title
+    activeDiv.querySelector('[name="icon"]').value = m.icon
+    activeDiv.querySelector('[name="description"]').value = m.description || ''
+
+    if (m.type === 'goal') {
+        activeDiv.querySelector('[name="target"]').value = m.target
+        activeDiv.querySelector('[name="unit"]').value = m.unit || ''
+        activeDiv.querySelector('[name="date"]').value = m.deatline || ''
+    } else {
+        activeDiv.querySelector('[name="times"]').value = m.times
+        activeDiv.querySelector('[name="unit"]').value = m.unit || ''
+        activeDiv.querySelector('[name="period"]').value = m.period
+    }
+
+    editDlg.showModal()
+}
+
+editForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const m = missions.find(mission => mission.id === editDlg.dataset.id)
+    if (!m) throw new Error(`No mission found with id "${editDlg.dataset.id}"`)
+
+    const activeDiv = editDlg.querySelector(`.fullDiv[data-type="${m.type}"]`)
+    if (!activeDiv) throw new Error(`No edit form panel for mission type "${m.type}"`)
+
+    const value = (name) => activeDiv.querySelector(`[name="${name}"]`).value
+    m.title = value('title').trim()
+    m.icon = value('icon').trim() || m.title[0] || ''
+    m.description = value('description').trim()
+
+    if (m.type === 'goal') {
+        m.target = Number(value('target')) || 1
+        m.unit = value('unit').trim()
+        m.deatline = value('date')
+    } else {
+        m.times = Number(value('times')) || 1
+        m.unit = value('unit').trim()
+        m.period = value('period')
+    }
+
+    save()
+    render()
+    editDlg.close()
+})
+
+$('cancelEdit').addEventListener('click', () => editDlg.close())
+editDlg.addEventListener('click', (e) => {
+    if (e.target !== editDlg) return
+    const r = editDlg.getBoundingClientRect()
+    const inside = e.clientX >= r.left && e.clientX <= r.right &&
+                   e.clientY >= r.top  && e.clientY <= r.bottom
+    if (!inside) editDlg.close()
+})
+editDlg.addEventListener('close', () => editForm.reset())
 
 setType('goal')
 render()

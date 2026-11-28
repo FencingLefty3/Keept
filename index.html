@@ -18,9 +18,20 @@
             <button type="button" id="settings"><div class="icon-circle-user-round"></div></button>
         </gi>
     </div>
+
+
+
+
+    <!------------------------------------------- Body ------------------------------------------------------->
+
     <div id="missionContainer">
 
+
+
+
     </div>
+
+    <!------------------------------------------- Dialog ----------------------------------------------------->
     <dialog id="createMission">
         <div class="tabs" role="tablist" aria-label="Mission type">
             <button type="button" role="tab" data-type="goal" aria-selected="true">Goal</button>
@@ -28,7 +39,7 @@
         </div>
 
         <form method="dialog" id="missionForm">
-            <div id="Streak" class="fullDiv">
+            <div data-type="streak" class="fullDiv">
                 <li><it class="emoji">
                 <input name="icon" class="input" type="text" maxlength="2">
                 <p>Icon</p>
@@ -38,7 +49,7 @@
                     <p>Mission Name</p>
                 </it></li>
                 <it>
-                    <input name="description" class="input" type="text" required>
+                    <input name="description" class="input" type="text">
                     <p>Description</p>
                 </it>
                 <li><it class="times">
@@ -56,7 +67,19 @@
                     <p>Per Period</p>
                 </it></li>
             </div>
-            <div id="Goal" class="fullDiv">
+            <div data-type="goal" class="fullDiv">
+                <li><it class="emoji">
+                <input name="icon" class="input" type="text" maxlength="2">
+                <p>Icon</p>
+                </it>
+                <it class="title">
+                    <input name="title" class="input" type="text" placeholder="Read Books">
+                    <p>Mission Name</p>
+                </it></li>
+                <it>
+                    <input name="description" class="input" type="text">
+                    <p>Description</p>
+                </it>
                 <li><it class="emoji">
                     <input type="number" name="target" min="1" step="any" placeholder="5">
                     <p>Target</p>
@@ -72,9 +95,74 @@
 
             <div class="actions">
                 <button type="button" id="cancelMission">Cancel</button>
-                <button type="submit">Create</button>
+                <button type="submit">Keep It</button>
             </div>
         </form>
     </dialog>
+
+    <!------------------------------------------- Dialog ----------------------------------------------------->
+    <dialog id="editMission">
+        <form method="dialog" id="editForm">
+            <div data-type="streak" class="fullDiv">
+                <li><it class="emoji">
+                <input name="icon" class="input" type="text" maxlength="2">
+                <p>Icon</p>
+                </it>
+                <it class="title">
+                    <input name="title" class="input" type="text" placeholder="Read Books">
+                    <p>Mission Name</p>
+                </it></li>
+                <it>
+                    <input name="description" class="input" type="text">
+                    <p>Description</p>
+                </it>
+                <li><it class="times">
+                <input name="times" type="number" min="0" max="9999" placeholder="4" required>
+                <p>Times</p>
+                </it><it class="unit">
+                <input name="unit" type="text" placeholder="pages" required>
+                <p>Unit</p>
+                </it><it class="period">
+                    <select name="period" required>
+                        <option value="day">per Day</option>
+                        <option value="week">per Week</option>
+                        <option value="month">per Month</option>
+                    </select>
+                    <p>Per Period</p>
+                </it></li>
+            </div>
+            <div data-type="goal" class="fullDiv">
+                <li><it class="emoji">
+                <input name="icon" class="input" type="text" maxlength="2">
+                <p>Icon</p>
+                </it>
+                <it class="title">
+                    <input name="title" class="input" type="text" placeholder="Read Books">
+                    <p>Mission Name</p>
+                </it></li>
+                <it>
+                    <input name="description" class="input" type="text">
+                    <p>Description</p>
+                </it>
+                <li><it class="emoji">
+                    <input type="number" name="target" min="1" step="any" placeholder="5">
+                    <p>Target</p>
+                </it><it class="title">
+                    <input type="text" name="unit" maxlength="8" placeholder="books">
+                    <p>Unit</p>
+                </it></li>
+                <it>
+                    <input type="date" name="date">
+                    <p>Deadline</p>
+                </it>
+            </div>
+
+            <div class="actions">
+                <button type="button" id="cancelEdit">Cancel</button>
+                <button type="submit">Keep It</button>
+            </div>
+        </form>
+    </dialog>
+
 </body>
 </html>

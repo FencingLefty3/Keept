@@ -3,6 +3,8 @@
     --white: #e7e7e3f7;
     --yellow: #eae66e;
     --red: #ef866a;
+
+    font-family: Helvetica, sans-serif;
 }
 body {
     display: flex;
@@ -15,14 +17,15 @@ body {
 
     background: #080312;
     background: linear-gradient(180deg, #ab7464 0%, #c26e56 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
 
-    height: 100dvh;
+    min-height: 100dvh;
     width: 100dvw;
 }
 .logoText {
     color: #ef866a;
     font-size: 3rem;
-    font-family: Helvetica, sans-serif;
     margin: 0 0.4rem;
 }
 gi {
@@ -96,13 +99,13 @@ li > it {
     justify-content: space-between;
 
     width: 90dvw;
-    height: 20%;
+    height: 20dvh;
 }
 #missionContainer {
     width: 100dvw;
     min-height: 80%;
 }
-#createMission {
+#createMission, #editMission {
     width: 90%;
     min-height: 80%;
 
@@ -118,7 +121,7 @@ li > it {
     -webkit-backdrop-filter: blur(20px);  
     backdrop-filter: blur(20px);
 }
-#createMission:open {
+#createMission:open, #editMission:open {
     display: flex;
 }
 it > p {
@@ -172,7 +175,7 @@ button:hover {
     background: #ffffff14;
 }
 .fullDiv {
-    width: 100%;
+    width: 85%;
     height: 100%;
 
     display: flex;
@@ -190,13 +193,13 @@ form {
     justify-content: space-between;
 
 }
-#createMission {
+#createMission, #editMission {
     color: var(--white);
     max-width: 90dvw;
     max-height: 90dvh;
     overflow: auto;
 }
-#createMission::backdrop {
+#createMission::backdrop, #editMission::backdrop {
     background: #080312a0;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
@@ -232,11 +235,14 @@ form {
 }
 
 /* show only the active panel */
-#createMission[data-type="goal"] #Streak,
-#createMission[data-type="streak"] #Goal {
+#createMission[data-type="goal"] .fullDiv[data-type="streak"],
+#createMission[data-type="streak"] .fullDiv[data-type="goal"] {
     display: none;
 }
-
+#editMission[data-type="goal"] .fullDiv[data-type="streak"],
+#editMission[data-type="streak"] .fullDiv[data-type="goal"] {
+    display: none;
+}
 /* bottom buttons */
 .actions {
     width: 85%;
@@ -269,5 +275,73 @@ input:focus-visible, select:focus-visible { border-color: var(--yellow); }
 
 @media (min-width: 640px) {
     #createMission:open { flex-direction: row; }
+    #editMission:open { flex-direction: row; }
     .tabs { flex-direction: column; width: 9rem; }
+}
+.mission { 
+    width: 90dvw; 
+    max-width: 560px; 
+    margin: 0.6rem auto; 
+    padding: 0 0.8rem 0 0; /* Removed top/bottom/left padding so .mIcon touches the edges */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Keeps .mBody and .bar vertically centered */
+           
+    border-radius: 15px; 
+    color: var(--white);
+    background: var(--red); 
+    overflow: hidden; /* Keeps child backgrounds/borders clipped to the 15px corners */
+}
+.mission.done { 
+    border-color: var(--yellow); 
+}
+
+.mIcon { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+
+    align-self: stretch; /* Stretches to full height of .mission */
+    width: max-content;
+
+    padding: 0.8rem 1.5rem;
+    gap: 0.6rem; 
+    font-size: 2rem; 
+
+    border-right: 3px solid #7f7f7f46;
+}
+
+.mBody {
+    display: flex; 
+    align-items: center; 
+    flex-direction: column;
+    gap: 0.6rem; 
+    flex: 1;
+    padding: 0.8rem;
+    font-size: 1.4rem; 
+}
+.mDesc { 
+    margin: 0.3rem 0; 
+    opacity: 0.6; 
+}
+.mDetails {
+    justify-content: center;
+    align-items: center;
+}
+.mDetails p {
+    margin: 0.3rem 0;
+    opacity: 0.6; 
+}
+.bar { 
+    height: 8px;
+    width: 100%;
+    border-radius: 6px; 
+    background: #ffffff22; 
+    overflow: hidden; 
+}
+.bar i { 
+    display: block; 
+    height: 100%; 
+    background: var(--yellow); 
 }
